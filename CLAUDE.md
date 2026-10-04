@@ -22,10 +22,11 @@ CI (`.github/workflows/ci.yml`) runs `npm run lint` and then `npm test` on Node 
 
 ## Conventions
 
-- CommonJS (`require` / `module.exports`), not ES modules: ESLint is configured with `sourceType: "script"`.
-- 2-space indentation, double quotes, semicolons.
+- Use CommonJS (`require` / `module.exports`), not ES modules (`import` / `export`): ESLint is configured with `sourceType: "script"`.
+- Use `node:test` + `node:assert` + `supertest` against the imported `app`, not Jest or Mocha. Put tests in `tests/` as `*.test.js`.
+- Use 2-space indentation, not tabs. Use double quotes, not single quotes, and always end statements with semicolons.
+- Access data through the functions in `db/store.js`, not by keeping arrays or objects inside route files.
+- Return errors as JSON `{ error: "message" }` with a proper status code (400 for invalid input, 404 for not found), not plain text. Return 201 on create.
+- Convert route params with `Number(req.params.id)` before use, not as raw strings: the store compares ids with `===`.
 - Start each route handler with a comment naming the method and path, e.g. `// GET /users/:id — fetch a single user`.
-- Return errors as JSON `{ error: "message" }` with a proper status code (400 for invalid input, 404 for not found). Return 201 on create.
-- Convert route params to the right type before use (`Number(req.params.id)`); the store compares ids with `===`.
-- Tests use `node:test` + `node:assert` + `supertest` against the imported `app`, not Jest or Mocha. Put them in `tests/` as `*.test.js`.
-- File names lowercase with hyphens; code, comments and variable names in English.
+- Name files in lowercase with hyphens, not camelCase. Write code, comments and variable names in English.
